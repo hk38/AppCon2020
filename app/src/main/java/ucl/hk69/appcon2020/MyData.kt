@@ -8,8 +8,11 @@ import com.google.gson.Gson
 import io.realm.Realm
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.DataOutputStream
 import java.lang.Exception
+import java.net.Socket
 import java.util.UUID
 import java.util.Date
 
@@ -27,7 +30,8 @@ open class SettingData(
      @PrimaryKey open var name:String = "setting",
      open var token:String = "",
      open var tokenCanged:Boolean = false,
-     open var raspiName:String = ""
+     open var raspiIp:String = "",
+     open var raspiPort:Int = 55555
 ):RealmObject()
 
 class MyMode{
@@ -43,55 +47,47 @@ class MyMode{
 class SendData(val title: String, val subTitle: String, val backColor: String, val textColor: String, val ctx: Context){
      fun send(){
           val realm = Realm.getDefaultInstance()
-          var name = "raspberrypi"
+          var ip:String? = null
+          var port = 55555
+
+          val map: MutableMap<String, String> = mutableMapOf()
+          map["Title"] = title
+          map["SubTitle"] = subTitle
+          map["Background_Color"] = backColor
+          map["Text_Color"] = textColor
+
           realm.executeTransaction {
-               name = realm.where(SettingData::class.java).equalTo("name", "setting").findFirst()?.raspiName ?: "raspberrypi"
-          }
-          val btManager = ctx.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
-          val btAdapter = btManager.adapter
-          val btDevices = btAdapter.bondedDevices.toList()
-          var btSoc: BluetoothSocket? = null
-          for (device in btDevices) {
-               if (device.name == name) btSoc = device.createRfcommSocketToServiceRecord(UUID.fromString("5E7B99D0-F404-4425-8125-98A2265B4333"))
+               val data = realm.where(SettingData::class.java).equalTo("name", "setting").findFirst()
+               ip = data?.raspiIp
+               port = data?.raspiPort ?: 55555
+
+               map["Token"] = realm.where(SettingData::class.java).equalTo("name", "setting").findFirst()?.token ?: ""
           }
 
-          if(btSoc == null) {
-               Log.d("sendData", "BT Device $name is Null")
+
+          if(ip == null) {
+               Log.d("connecting", "ip addr is null")
                return
           }
 
+          val msg = Gson().toJson(map)
+          Log.d("msg", msg)
 
-          try {
-               Log.d("bt debug", "before connect")
-               btSoc.connect()
-               Log.d("bt debug", "after connect, before getDOS")
-               val btDos = DataOutputStream(btSoc.outputStream)
 
-               Log.d("bt debug", "make Map")
-               val map: MutableMap<String, String> = mutableMapOf()
-               map["title"] = title
-               map["subTitle"] = subTitle
-               map["backColor"] = backColor
-               map["textColor"] = textColor
-               realm.executeTransaction {
-                    map["token"] = realm.where(SettingData::class.java).equalTo("name", "setting").findFirst()?.token ?: ""
-               }
 
-               val msg = Gson().toJson(map)
-               Log.d("bt debug", "$msg, before send")
-
-               btDos.writeUTF(msg)
-               btDos.flush()
-               Log.d("bt debug", "after send")
-
-               Thread.sleep(1000)
-               Log.d("bt debug", "before Soc close")
-               btDos.close()
-               Log.d("bt debug", "after sock close")
-          }catch (e: Exception){ e.printStackTrace() }finally {
+          GlobalScope.launch {
                try {
-                    btSoc.close()
-               }catch (e: Exception){ e.printStackTrace() }
+                    val soc = Socket(ip, port)
+                    val dos = DataOutputStream(soc.getOutputStream())
+                    Log.d("com debug", "maked dos")
+                    dos.writeUTF(msg)
+                    Thread.sleep(1000)
+                    dos.close()
+                    soc.close()
+                    Log.d("com debug", "soc closed")
+               }catch (e:Exception){
+                    e.printStackTrace()
+               }
           }
      }
 }

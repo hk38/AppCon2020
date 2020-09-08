@@ -66,7 +66,8 @@ class MainActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetListener {
         if(realm.where(SettingData::class.java).findAll().isEmpty()){
             realm.executeTransaction {
                 val setting = it.createObject(SettingData::class.java, "setting")
-                setting.raspiName = ""
+                setting.raspiIp = ""
+                setting.raspiPort = 55555
                 setting.token = ""
                 setting.tokenCanged = false
             }

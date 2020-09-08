@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.google.android.material.snackbar.Snackbar
 import io.realm.Realm
 import kotlinx.android.synthetic.main.fragment_setting.*
 
@@ -37,6 +38,7 @@ class SettingFragment : Fragment() {
                 if(setting.tokenCanged) Color.RED
                 else Color.BLACK
             )
+            editIp.setText(setting.raspiIp)
         }
     }
 
@@ -44,8 +46,11 @@ class SettingFragment : Fragment() {
         val realm = Realm.getDefaultInstance()
         realm.executeTransaction {
             val setting = realm.where(SettingData::class.java).equalTo("name", "setting").findFirst()
-            setting?.raspiName = editBtName.text.toString()
+            setting?.raspiIp = editIp.text.toString()
+            setting?.raspiPort = editPort.text.toString().toInt()
             Log.d("token", "${setting?.token}")
         }
+
+        Snackbar.make(requireView(), "saved!", Snackbar.LENGTH_SHORT).show()
     }
 }
