@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "639223663361",
+    "firebase_url": "https://appcon2020-d7fb6.firebaseio.com",
+    "project_id": "appcon2020-d7fb6",
+    "storage_bucket": "appcon2020-d7fb6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:639223663361:android:93a6cbad627fc2d08f2900",
+        "android_client_info": {
+          "package_name": "ucl.hk69.appcon2020"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "639223663361-6m9oqcvrhptb94k1h6k97ju1qjl4fcmt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDVXmmY9KeaMzAWKLIiEIaIefxCBkudEc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "639223663361-6m9oqcvrhptb94k1h6k97ju1qjl4fcmt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

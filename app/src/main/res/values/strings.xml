@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">AppCon2020</string>
+    <string name="title_home">Home</string>
+    <string name="title_list">List</string>
+    <string name="title_setting">Setting</string>
+    <string name="title_add">Add</string>
+    <string name="set_temp_text">テンプレート選択</string>
+</resources>
