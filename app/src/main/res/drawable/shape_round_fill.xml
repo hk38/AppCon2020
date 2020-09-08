@@ -6,7 +6,7 @@
     <solid android:color="@color/colorPrimaryDark" />
 
     <!-- 角の丸み -->
-    <corners android:radius="6dp" />
+    <corners android:radius="24dp" />
 
     <!-- 枠線 width:線の幅、color:線の色 -->
     <stroke

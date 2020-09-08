@@ -26,7 +26,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:background="#AA0000"
-        android:foreground="@drawable/shape_round_stroke"
+        android:foreground="@drawable/shape_stroke"
         android:orientation="vertical"
         android:padding="4dp"
         app:layout_constraintBottom_toBottomOf="parent"

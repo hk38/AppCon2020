@@ -51,10 +51,14 @@ class SendData(val title: String, val subTitle: String, val backColor: String, v
           var port = 55555
 
           val map: MutableMap<String, String> = mutableMapOf()
-          map["Title"] = title
-          map["SubTitle"] = subTitle
-          map["Background_Color"] = backColor
-          map["Text_Color"] = textColor
+          map["Title"] = if(title.isNullOrBlank()) " "
+          else title
+          map["SubTitle"] = if(subTitle.isNullOrBlank()) " "
+          else subTitle
+          map["Background_Color"] = if(backColor.isNullOrBlank()) "ffffffff"
+          else backColor
+          map["Text_Color"] = if(textColor.isNullOrBlank()) "ff000000"
+          else textColor
 
           realm.executeTransaction {
                val data = realm.where(SettingData::class.java).equalTo("name", "setting").findFirst()

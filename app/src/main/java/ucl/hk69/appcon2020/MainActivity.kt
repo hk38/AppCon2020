@@ -30,15 +30,6 @@ class MainActivity : AppCompatActivity(), TimePickerDialog.OnTimeSetListener {
         setContentView(R.layout.activity_main)
 
         val navController = findNavController(R.id.nav_host_fragment)
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home,
-                R.id.navigation_list,
-                R.id.navigation_setting
-            )
-        )
-
-        setupActionBarWithNavController(navController, appBarConfiguration)
         nav_view.setupWithNavController(navController)
 
 
